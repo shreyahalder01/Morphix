@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Morphix is a cinematic AI mixed-media video platform for transforming footage into anime, claymation, sketch, collage, and more.">
+<title>Morphix - Cinematic Mixed-Media Video Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050608;
+    --bg-2: #0b0d12;
+    --bg-3: #10131a;
+    --panel: rgba(16, 19, 26, 0.82);
+    --panel-strong: rgba(19, 23, 31, 0.96);
+    --line: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(255, 255, 255, 0.14);
+    --text: #d7dbe5;
+    --muted: #96a0b5;
+    --soft: #6f778a;
+    --white: #f7f8fb;
+    --black: #020204;
+    --purple: #8b68ff;
+    --purple-2: #b59aff;
+    --blue: #42a6ff;
+    --magenta: #ef5aa8;
+    --silver: #c2c7d4;
+    --green: #57e6a4;
+    --shadow: 0 32px 120px rgba(0, 0, 0, 0.48);
+    --glow-purple: 0 0 80px rgba(139, 104, 255, 0.22);
+    --glow-blue: 0 0 80px rgba(66, 166, 255, 0.18);
+    --radius-xl: 30px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --container: 1220px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(139, 104, 255, 0.12), transparent 24%),
+      radial-gradient(circle at 80% 0%, rgba(66, 166, 255, 0.10), transparent 25%),
+      radial-gradient(circle at 80% 70%, rgba(239, 90, 168, 0.10), transparent 22%),
+      linear-gradient(180deg, #06070b 0%, #070a0f 35%, #050608 100%);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button, input, textarea, select { font: inherit; }
+  h1, h2, h3, h4, .brand, .display, .section-title {
+    font-family: 'Syne', system-ui, sans-serif;
+    letter-spacing: -0.03em;
+    color: var(--white);
+  }
+  h1, h2, h3, p { margin: 0; }
+
+  .page-shell { position: relative; }
+  .ambient {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .ambient::before,
+  .ambient::after {
+    content: '';
+    position: absolute;
+    width: 42vw;
+    height: 42vw;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.22;
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+  .ambient::before {
+    background: rgba(139, 104, 255, 0.65);
+    top: -8vw;
+    left: -10vw;
+  }
+  .ambient::after {
+    background: rgba(66, 166, 255, 0.58);
+    bottom: -12vw;
+    right: -10vw;
+    animation-delay: -4s;
+  }
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(32px, -18px, 0) scale(1.08); }
+  }
+
+  .container {
+    width: min(var(--container), calc(100% - 48px));
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(22px);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(139, 104, 255, 0.24);
+    background: rgba(139, 104, 255, 0.10);
+    color: var(--purple-2);
+    font-size: 0.79rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    box-shadow: 0 0 18px rgba(139, 104, 255, 0.7);
+  }
+
+  .section {
+    padding: 96px 0;
+    position: relative;
+  }
+  .section.compact { padding: 76px 0; }
+  .section-label {
+    color: var(--purple-2);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.74rem;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .section-title {
+    font-size: clamp(2.1rem, 4vw, 3.9rem);
+    line-height: 1.04;
+    max-width: 860px;
+  }
+  .section-copy {
+    max-width: 700px;
+    color: var(--muted);
+    font-size: 1.04rem;
+    margin-top: 18px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(5, 6, 8, 0.68);
+    backdrop-filter: blur(22px);
+  }
+  .topbar-inner {
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.14rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .brand-mark {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    box-shadow: 0 0 18px rgba(139, 104, 255, 0.7);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .nav a { transition: color 0.2s ease, opacity 0.2s ease; }
+  .nav a:hover { color: var(--white); }
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn {
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    color: white;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
+    box-shadow: 0 18px 40px rgba(66, 166, 255, 0.18), 0 12px 32px rgba(139, 104, 255, 0.16);
+  }
+  .btn-secondary {
+    color: var(--white);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line-strong);
+  }
+  .btn-ghost {
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+  }
+
+  .hero {
+    padding: 86px 0 42px;
+    position: relative;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 28px;
+    align-items: center;
+  }
+  .hero-copy {
+    padding-right: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(3.2rem, 7vw, 6.5rem);
+    line-height: 0.94;
+    margin-top: 18px;
+    max-width: 920px;
+  }
+  .gradient-text {
+    background: linear-gradient(90deg, #fff 0%, var(--purple-2) 22%, var(--blue) 56%, var(--magenta) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-copy p {
+    max-width: 640px;
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 1.06rem;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+  .hero-statbar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .stat {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid var(--line);
+  }
+  .stat strong {
+    display: block;
+    color: var(--white);
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  .stat span {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .studio-frame {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: relative;
+    background:
+      radial-gradient(circle at top left, rgba(139,104,255,0.26), transparent 32%),
+      radial-gradient(circle at 80% 20%, rgba(66,166,255,0.18), transparent 24%),
+      linear-gradient(180deg, rgba(16, 19, 26, 0.96), rgba(7, 10, 15, 0.95));
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: var(--shadow), var(--glow-purple);
+    min-height: 680px;
+  }
+  .studio-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: rgba(10, 13, 18, 0.8);
+  }
+  .studio-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white);
+    font-weight: 700;
+  }
+  .dots { display: inline-flex; gap: 8px; }
+  .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .dots i:nth-child(1) { background: #ff6961; }
+  .dots i:nth-child(2) { background: #ffbd2e; }
+  .dots i:nth-child(3) { background: #28c840; }
+
+  .studio-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 16px;
+  }
+  .preview-stage {
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.03);
+    min-height: 420px;
+    position: relative;
+  }
+  .preview-video {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(6,7,11,0.06), rgba(6,7,11,0.34)),
+      radial-gradient(circle at 20% 22%, rgba(239,90,168,0.52), transparent 24%),
+      radial-gradient(circle at 72% 24%, rgba(66,166,255,0.56), transparent 28%),
+      radial-gradient(circle at 50% 76%, rgba(139,104,255,0.56), transparent 32%),
+      linear-gradient(135deg, #161326 0%, #0d1020 45%, #16161c 100%);
+  }
+  .preview-video::before,
+  .preview-video::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 6px, rgba(255,255,255,0.02) 6px 7px);
+    mix-blend-mode: screen;
+  }
+  .preview-video::after {
+    background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,0.45) 100%);
+  }
+  .preview-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+  .preview-card {
+    width: min(100%, 420px);
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(8, 10, 15, 0.52);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.38);
+  }
+  .preview-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .preview-title strong { color: var(--white); font-size: 0.98rem; }
+  .preview-title span { color: var(--green); font-size: 0.82rem; }
+  .queue {
+    display: grid;
+    gap: 10px;
+  }
+  .queue-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .queue-row .label { color: var(--white); font-size: 0.9rem; }
+  .queue-row .meta { color: var(--muted); font-size: 0.82rem; }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .status i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 18px rgba(87,230,164,0.75);
+  }
+
+  .side-stack {
+    display: grid;
+    gap: 16px;
+  }
+  .mini-card {
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+  }
+  .mini-card h4 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .pill.active {
+    color: white;
+    border-color: rgba(139,104,255,0.35);
+    background: rgba(139,104,255,0.15);
+  }
+
+  .before-after {
+    margin-top: 16px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.02);
+  }
+  .before-after .frame {
+    position: relative;
+    min-height: 210px;
+    background: linear-gradient(135deg, #10131a 0%, #1b2030 100%);
+  }
+  .before-after .frame::before,
+  .before-after .frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .before-after .frame::before {
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.12), transparent 24%),
+      radial-gradient(circle at 70% 55%, rgba(255, 255, 255, 0.12), transparent 20%);
+    clip-path: inset(0 48% 0 0);
+    transition: clip-path 0.14s ease;
+  }
+  .before-after .frame::after {
+    background:
+      linear-gradient(135deg, rgba(139,104,255,0.22), rgba(66,166,255,0.14)),
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.18), transparent 24%),
+      radial-gradient(circle at 70% 55%, rgba(255,255,255,0.18), transparent 20%);
+    clip-path: inset(0 0 0 48%);
+    transition: clip-path 0.14s ease;
+  }
+  .before-after .tag {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(5, 6, 8, 0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: var(--white);
+    font-size: 0.8rem;
+    backdrop-filter: blur(14px);
+  }
+  .before-after .tag.after { left: auto; right: 16px; }
+  .before-after .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px 14px;
+  }
+  .before-after input[type="range"] {
+    width: 100%;
+    accent-color: var(--purple);
+  }
+  .value-chip {
+    min-width: 56px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--purple-2);
+    font-weight: 700;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .panel {
+    border-radius: var(--radius-xl);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(22px);
+    box-shadow: var(--shadow);
+  }
+  .panel-inner { padding: 22px; }
+
+  .upload-zone {
+    padding: 26px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(139,104,255,0.08), rgba(255,255,255,0.02));
+    border: 1px dashed rgba(139,104,255,0.30);
+    min-height: 240px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+  .upload-zone strong {
+    display: block;
+    font-size: 1.35rem;
+    margin-top: 14px;
+    color: var(--white);
+  }
+  .upload-zone p { max-width: 520px; color: var(--muted); margin-top: 10px; }
+  .formats { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+
+  .style-cloud {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .style-tile {
+    position: relative;
+    min-height: 126px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.09);
+    background: linear-gradient(135deg, #10131a 0%, #191f2c 100%);
+    cursor: pointer;
+    transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+  }
+  .style-tile:hover,
+  .style-tile.active {
+    transform: translateY(-3px) scale(1.01);
+    border-color: rgba(139,104,255,0.38);
+    box-shadow: 0 18px 42px rgba(0,0,0,0.32), 0 0 0 1px rgba(139,104,255,0.12) inset;
+  }
+  .style-tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.74) 100%);
+  }
+  .style-tile .name,
+  .style-tile .tag {
+    position: absolute;
+    z-index: 1;
+  }
+  .style-tile .name {
+    left: 14px;
+    bottom: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+  }
+  .style-tile .tag {
+    top: 12px;
+    right: 12px;
+    font-size: 0.72rem;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: white;
+  }
+  .tile-anime { background: linear-gradient(135deg, #150825, #42115f 44%, #f05fd8); }
+  .tile-clay { background: linear-gradient(135deg, #231204, #7a3f16 52%, #f0b066); }
+  .tile-sketch { background: linear-gradient(135deg, #0f1014, #4d5466 52%, #e2e6ec); }
+  .tile-collage { background: linear-gradient(135deg, #2b0d24, #6d2267 52%, #f27ac0); }
+  .tile-water { background: linear-gradient(135deg, #0d1627, #21578d 52%, #86d3ff); }
+  .tile-cyber { background: linear-gradient(135deg, #05110d, #0d5b3e 52%, #5bffbf); }
+  .tile-noir { background: linear-gradient(135deg, #000 0%, #151515 44%, #7b7b7b); }
+  .tile-vhs { background: linear-gradient(135deg, #241400, #6f4a16 52%, #ffc84f); }
+  .tile-ghibli { background: linear-gradient(135deg, #0d1e2a, #1a4e69 52%, #74d7cb); }
+
+  .workflow {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .workflow-step {
+    padding: 14px 12px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    color: var(--muted);
+    font-size: 0.82rem;
+    min-height: 92px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+  .workflow-step strong { color: var(--white); font-size: 0.9rem; }
+  .workflow-step:hover,
+  .workflow-step.active {
+    transform: translateY(-2px);
+    border-color: rgba(139,104,255,0.34);
+    background: rgba(139,104,255,0.10);
+  }
+  .workflow-step .meter {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .workflow-step .meter i {
+    display: block;
+    height: 100%;
+    width: 60%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--purple), var(--blue));
+  }
+
+  .editor {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr) 300px;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .editor-panel {
+    border-radius: 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .editor-panel header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+  }
+  .editor-panel header strong { font-size: 0.92rem; }
+  .editor-panel .body { padding: 16px 18px 18px; }
+  .chip-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .chip {
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: var(--muted);
+    font-size: 0.83rem;
+    cursor: pointer;
+    transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+  }
+  .chip.active {
+    border-color: rgba(139,104,255,0.34);
+    background: rgba(139,104,255,0.12);
+    color: var(--white);
+  }
+  .canvas {
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(10, 13, 19, 0.92), rgba(6, 8, 12, 0.92));
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+  }
+  .canvas-top {
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+  }
+  .canvas-preview {
+    padding: 18px;
+    display: grid;
+    gap: 16px;
+  }
+  .screen {
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(139,104,255,0.36), transparent 24%),
+      radial-gradient(circle at 78% 20%, rgba(66,166,255,0.28), transparent 20%),
+      linear-gradient(135deg, #10131a 0%, #1e2230 58%, #111319 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    min-height: 360px;
+    overflow: hidden;
+    position: relative;
+  }
+  .screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), transparent 34%);
+  }
+  .screen::after {
+    content: 'Preview Frame';
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: white;
+    font-size: 0.78rem;
+    background: rgba(5,6,8,0.52);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+  }
+  .play-badge {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .play-badge i {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  .play-badge i::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
+    border-left: 18px solid white;
+    margin-left: 4px;
+  }
+  .timeline {
+    display: grid;
+    gap: 10px;
+    padding: 18px 18px 22px;
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .track {
+    display: grid;
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    color: var(--muted);
+  }
+  .track .bar {
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    overflow: hidden;
+    position: relative;
+  }
+  .track .bar span {
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(139,104,255,0.55), rgba(66,166,255,0.55));
+  }
+  .track .bar.style span { width: 100%; }
+  .track .bar.audio span { width: 84%; }
+  .track .bar.caption span { width: 63%; }
+  .controls-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .control {
+    flex: 1 1 180px;
+    padding: 14px 14px 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .control label {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-size: 0.86rem;
+  }
+  .control input[type="range"] { width: 100%; accent-color: var(--purple); }
+  .control .readout { color: var(--purple-2); font-weight: 700; }
+
+  .dashboard {
+    display: grid;
+    grid-template-columns: 1.06fr 0.94fr;
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .project-list,
+  .activity-list {
+    display: grid;
+    gap: 12px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 15px 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .item strong { display: block; color: var(--white); font-size: 0.95rem; }
+  .item small { color: var(--muted); }
+  .badge {
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    background: rgba(255,255,255,0.03);
+  }
+  .badge.good { color: var(--green); border-color: rgba(87,230,164,0.22); background: rgba(87,230,164,0.10); }
+  .badge.warn { color: #ffd36a; border-color: rgba(255,211,106,0.22); background: rgba(255,211,106,0.10); }
+
+  .code-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+  }
+  pre.code {
+    margin: 0;
+    padding: 18px;
+    border-radius: 22px;
+    overflow: auto;
+    white-space: pre-wrap;
+    color: #dce3f1;
+    background: #0a0d12;
+    border: 1px solid rgba(255,255,255,0.08);
+    line-height: 1.6;
+    font-size: 0.9rem;
+  }
+  pre.code .muted { color: #7d8596; }
+  .code-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .code-title strong { color: var(--white); }
+  .code-title span { color: var(--muted); font-size: 0.8rem; }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .plan {
+    padding: 24px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .plan.featured {
+    background: linear-gradient(180deg, rgba(139,104,255,0.10), rgba(255,255,255,0.04));
+    border-color: rgba(139,104,255,0.30);
+    box-shadow: 0 24px 60px rgba(139,104,255,0.12);
+  }
+  .plan .label {
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  .plan .price {
+    margin-top: 14px;
+    font-size: 2.9rem;
+    line-height: 1;
+    color: var(--white);
+  }
+  .plan .price small { font-size: 0.9rem; color: var(--muted); }
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 20px;
+    display: grid;
+    gap: 10px;
+  }
+  .features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .tick {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    background: rgba(87,230,164,0.14);
+    color: var(--green);
+    font-size: 0.72rem;
+    flex: none;
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .faq {
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .faq h4 { font-size: 0.98rem; margin-bottom: 8px; }
+  .faq p { color: var(--muted); }
+
+  .footer {
+    padding: 42px 0 52px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    color: var(--muted);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr repeat(3, 1fr);
+    gap: 20px;
+  }
+  .footer a { display: block; padding: 6px 0; color: var(--muted); }
+  .footer a:hover { color: var(--white); }
+  .footer p { margin-top: 12px; max-width: 420px; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .separator {
+    margin: 22px 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+  }
+
+  .mobile-only { display: none; }
+
+  @media (max-width: 1200px) {
+    .hero-grid,
+    .dashboard,
+    .editor,
+    .studio-body,
+    .footer-grid { grid-template-columns: 1fr; }
+    .workflow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 780px) {
+    .container { width: min(var(--container), calc(100% - 32px)); }
+    .nav { display: none; }
+    .hero h1 { font-size: clamp(2.9rem, 13vw, 4.4rem); }
+    .hero-statbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .style-cloud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .faq-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .code-grid { grid-template-columns: 1fr; }
+    .mobile-only { display: inline-flex; }
+  }
+  @media (max-width: 560px) {
+    .hero-statbar,
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .style-cloud,
+    .workflow { grid-template-columns: 1fr; }
+    .studio-body { padding: 14px; }
+    .canvas-top { flex-direction: column; align-items: flex-start; }
+    .track { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<div class="page-shell">
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="#hero"><span class="brand-mark"></span> Morphix</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#features">Features</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#editor">Editor</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="nav-cta">
+      <button class="btn btn-ghost mobile-only">Menu</button>
+      <button class="btn btn-secondary">Sign in</button>
+      <button class="btn btn-primary">Start Free</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="dot"></span> AI mixed-media video studio</div>
+        <h1>Turn Videos Into <span class="gradient-text">Living Mixed-Media Art</span></h1>
+        <p>
+          A premium, cinematic platform for creators who want frame-consistent AI stylization, scene-aware editing, and export-ready mixed-media animation in one workflow.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Upload video</button>
+          <button class="btn btn-secondary">View demo</button>
+          <button class="btn btn-ghost">See architecture</button>
+        </div>
+        <div class="hero-statbar">
+          <div class="stat"><strong>21</strong><span>style systems</span></div>
+          <div class="stat"><strong>4K</strong><span>export pipeline</span></div>
+          <div class="stat"><strong>98%</strong><span>motion retention</span></div>
+          <div class="stat"><strong>&lt;3m</strong><span>typical renders</span></div>
+        </div>
+      </div>
+
+      <div class="studio-frame reveal">
+        <div class="studio-top">
+          <div class="studio-title"><span class="dots"><i></i><i></i><i></i></span> Render cockpit</div>
+          <div class="status"><i></i> GPU queue healthy</div>
+        </div>
+        <div class="studio-body">
+          <div>
+            <div class="preview-stage">
+              <div class="preview-video"></div>
+              <div class="preview-overlay">
+                <div class="preview-card">
+                  <div class="preview-title">
+                    <strong>Scene 04 - Neon alley</strong>
+                    <span>Stylization live</span>
+                  </div>
+                  <div class="queue">
+                    <div class="queue-row"><div><div class="label">Analyze footage</div><div class="meta">Face mesh + optical flow</div></div><div class="badge good">Done</div></div>
+                    <div class="queue-row"><div><div class="label">Detect scenes</div><div class="meta">5 segments found</div></div><div class="badge good">Done</div></div>
+                    <div class="queue-row"><div><div class="label">Stylize frame</div><div class="meta">Anime + watercolor blend</div></div><div class="badge warn">Running</div></div>
+                    <div class="queue-row"><div><div class="label">Prepare export</div><div class="meta">1080p social render</div></div><div class="badge">Queued</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="before-after">
+              <div class="frame" id="beforeAfterFrame">
+                <div class="tag">Before</div>
+                <div class="tag after">After</div>
+              </div>
+              <div class="slider-row">
+                <span class="badge">Raw</span>
+                <input id="mixSlider" type="range" min="0" max="100" value="48">
+                <span class="value-chip" id="mixValue">48%</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="side-stack">
+            <div class="mini-card">
+              <h4>Selected style</h4>
+              <div class="pill-row">
+                <span class="pill active" id="selectedStyle">Anime</span>
+                <span class="pill">Strength 82%</span>
+                <span class="pill">Face lock</span>
+              </div>
+            </div>
+            <div class="mini-card">
+              <h4>Style blend</h4>
+              <div class="pill-row">
+                <span class="pill active">Anime</span>
+                <span class="pill">Watercolor</span>
+                <span class="pill">Cyberpunk</span>
+                <span class="pill">Noir</span>
+              </div>
+            </div>
+            <div class="mini-card">
+              <h4>Export targets</h4>
+              <div class="pill-row">
+                <span class="pill">MP4</span>
+                <span class="pill">MOV</span>
+                <span class="pill">GIF</span>
+                <span class="pill">Alpha</span>
+                <span class="pill">9:16</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section compact" id="features">
+    <div class="container">
+      <div class="section-label">Core platform</div>
+      <h2 class="section-title">A creative toolchain built like a premium film studio</h2>
+      <p class="section-copy">The interface is organized around the actual workflow: upload, analyze, stylize, preview, edit, and export. The product surface below is designed as a production system, not a landing page.</p>
+
+      <div class="grid-4 reveal" style="margin-top:24px;">
+        <div class="panel"><div class="panel-inner"><h3>AI video stylization</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Stable Video Diffusion, AnimateDiff, ControlNet, and temporal coherence passes for frame-consistent transformation.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>Motion preservation</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Optical flow, camera trajectory locking, and interpolation keep movement, timing, and lip sync aligned.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>Real-time previews</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Low-latency frame previews and scene slices let creators steer the result before a full render queue burn.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>4K social export</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Export MP4, MOV, GIF, alpha video, and aspect-ratio presets for all major social channels.</p></div></div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="grid-3 reveal">
+        <div class="panel"><div class="panel-inner"><h3>Masking and layers</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Subject masks, brush refinements, background replacement, and layered style regions.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>Prompt guidance</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Text prompts and reference images steer art direction without losing the motion signature of the source footage.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>Queue and autosave</h3><p class="section-copy" style="margin-top:10px; font-size:0.94rem;">Every action is versioned, autosaved, and synchronized to the render queue with status-aware feedback.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="workflow">
+    <div class="container">
+      <div class="section-label">Processing flow</div>
+      <h2 class="section-title">A nine-step AI pipeline with visible state at every stage</h2>
+      <p class="section-copy">This flow mirrors the product experience from upload to export. The UI exposes the processing state so creators feel in control of the render lifecycle.</p>
+
+      <div class="workflow reveal" id="workflowSteps">
+        <div class="workflow-step active" data-step="0"><strong>1. Upload</strong><span>Drag, browse, or connect cloud storage.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="1"><strong>2. Analyze</strong><span>Scene and motion data extraction.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="2"><strong>3. Detect scenes</strong><span>Segment continuity and cut points.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="3"><strong>4. Choose style</strong><span>Select or blend visual systems.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="4"><strong>5. Intensity</strong><span>Control transformation strength.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="5"><strong>6. Preview</strong><span>Inspect stylized key frames.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="6"><strong>7. Generate</strong><span>GPU render pass and coherence fix.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="7"><strong>8. Edit</strong><span>Timeline, masks, keyframes, captions.</span><div class="meter"><i></i></div></div>
+        <div class="workflow-step" data-step="8"><strong>9. Export</strong><span>Package final assets for delivery.</span><div class="meter"><i></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section compact" id="styles">
+    <div class="container">
+      <div class="section-label">Style gallery</div>
+      <h2 class="section-title">A cinematic style library that feels alive on hover</h2>
+      <p class="section-copy">The style system is designed as a remixable marketplace: each tile represents a render preset, a model workflow, or a hybrid blend.</p>
+
+      <div class="style-cloud reveal">
+        <div class="style-tile tile-anime active" data-style="Anime"><span class="tag">Popular</span><span class="name">Anime</span></div>
+        <div class="style-tile tile-clay" data-style="Claymation"><span class="tag">Trending</span><span class="name">Claymation</span></div>
+        <div class="style-tile tile-sketch" data-style="Sketch"><span class="tag">Clean</span><span class="name">Hand-drawn sketch</span></div>
+        <div class="style-tile tile-collage" data-style="Collage"><span class="tag">New</span><span class="name">Mixed-media collage</span></div>
+        <div class="style-tile tile-water" data-style="Watercolor"><span class="tag">Soft</span><span class="name">Watercolor motion</span></div>
+        <div class="style-tile tile-cyber" data-style="Cyberpunk"><span class="tag">Hot</span><span class="name">Cyberpunk neon</span></div>
+        <div class="style-tile tile-noir" data-style="Noir"><span class="tag">Moody</span><span class="name">Noir cinematic</span></div>
+        <div class="style-tile tile-vhs" data-style="VHS"><span class="tag">Retro</span><span class="name">Vintage film reel</span></div>
+        <div class="style-tile tile-ghibli" data-style="Ghibli"><span class="tag">Dreamy</span><span class="name">Dreamlike surreal</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="editor">
+    <div class="container">
+      <div class="section-label">Editor</div>
+      <h2 class="section-title">A professional AI video editor with layers, masks, keyframes, and timeline control</h2>
+      <p class="section-copy">This interface models the creator workspace: video preview center stage, style layers to the side, and a timeline with precise render metadata underneath.</p>
+
+      <div class="editor reveal">
+        <div class="editor-panel">
+          <header><strong>Styles</strong><span class="badge">Mix</span></header>
+          <div class="body">
+            <div class="chip-grid">
+              <div class="chip active">Anime</div>
+              <div class="chip">Watercolor</div>
+              <div class="chip">Cyberpunk</div>
+              <div class="chip">Noir</div>
+              <div class="chip">Clay</div>
+              <div class="chip">Sketch</div>
+            </div>
+            <div class="separator"></div>
+            <strong style="color:var(--white); font-size:0.9rem;">AI mask tools</strong>
+            <div class="pill-row" style="margin-top:10px;">
+              <span class="pill active">Subject</span>
+              <span class="pill">Background</span>
+              <span class="pill">Face</span>
+              <span class="pill">Brush</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas">
+          <div class="canvas-top">
+            <div>
+              <strong style="color:var(--white);">Project: Midnight Drive</strong><br>
+              <span>Scene-aware render, autosaved 12 seconds ago</span>
+            </div>
+            <div class="controls-row">
+              <button class="btn btn-ghost">Undo</button>
+              <button class="btn btn-ghost">Redo</button>
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </div>
+
+          <div class="canvas-preview">
+            <div class="screen">
+              <div class="play-badge"><i></i></div>
+            </div>
+
+            <div class="controls-row">
+              <div class="control">
+                <label><span>Style strength</span><span class="readout" id="strengthValue">82%</span></label>
+                <input id="strengthSlider" type="range" min="0" max="100" value="82">
+              </div>
+              <div class="control">
+                <label><span>Motion smoothness</span><span class="readout" id="smoothValue">70%</span></label>
+                <input id="smoothSlider" type="range" min="0" max="100" value="70">
+              </div>
+              <div class="control">
+                <label><span>Face preserve</span><span class="readout" id="faceValue">95%</span></label>
+                <input id="faceSlider" type="range" min="0" max="100" value="95">
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="track"><span>Video</span><div class="bar"><span></span></div></div>
+            <div class="track"><span>Style</span><div class="bar style"><span></span></div></div>
+            <div class="track"><span>Audio</span><div class="bar audio"><span></span></div></div>
+            <div class="track"><span>Captions</span><div class="bar caption"><span></span></div></div>
+          </div>
+        </div>
+
+        <div class="editor-panel">
+          <header><strong>Properties</strong><span class="badge good">Live</span></header>
+          <div class="body">
+            <div class="mini-card" style="margin-bottom:12px;">
+              <h4>Style prompt</h4>
+              <p class="section-copy" style="margin-top:6px; font-size:0.92rem;">Cinematic anime, soft cel shading, evening light, neon reflections, precise lip sync, smooth camera movement.</p>
+            </div>
+            <div class="mini-card" style="margin-bottom:12px;">
+              <h4>Export settings</h4>
+              <div class="pill-row">
+                <span class="pill active">4K</span>
+                <span class="pill">1080p</span>
+                <span class="pill">9:16</span>
+                <span class="pill">Alpha</span>
+              </div>
+            </div>
+            <div class="mini-card">
+              <h4>Shortcuts</h4>
+              <p class="section-copy" style="margin-top:6px; font-size:0.92rem;">Space play or pause. Shift plus S split. Cmd or Ctrl Z undo. Cmd or Ctrl Enter export.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section compact" id="dashboard">
+    <div class="container">
+      <div class="section-label">Dashboard</div>
+      <h2 class="section-title">Projects, render history, saved styles, credits, and team collaboration</h2>
+      <p class="section-copy">The dashboard centers the creator workflow: active jobs, completed renders, reusable styles, and usage tracking for subscription and team plans.</p>
+
+      <div class="dashboard reveal">
+        <div class="panel">
+          <div class="panel-inner">
+            <h3>Recent projects</h3>
+            <div class="project-list" style="margin-top:16px;">
+              <div class="item"><div><strong>Midnight Drive</strong><small>Anime blend · 2m 34s</small></div><span class="badge good">Rendering</span></div>
+              <div class="item"><div><strong>Festival Loop</strong><small>Claymation · 42s</small></div><span class="badge">Draft</span></div>
+              <div class="item"><div><strong>Neon Chorus</strong><small>Cyberpunk · 1m 08s</small></div><span class="badge good">Exported</span></div>
+              <div class="item"><div><strong>Soft Memory</strong><small>Watercolor · 3m 12s</small></div><span class="badge warn">Queued</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-inner">
+            <h3>Credits and status</h3>
+            <div class="grid-2" style="margin-top:16px;">
+              <div class="mini-card"><h4>Credits used</h4><p class="display" style="font-size:2rem;">218</p><p class="section-copy" style="margin-top:6px; font-size:0.9rem;">This month</p></div>
+              <div class="mini-card"><h4>Queue time</h4><p class="display" style="font-size:2rem;">03:14</p><p class="section-copy" style="margin-top:6px; font-size:0.9rem;">Average wait</p></div>
+            </div>
+            <div class="separator"></div>
+            <div class="activity-list">
+              <div class="item"><div><strong>Style marketplace</strong><small>24 new creator presets</small></div><span class="badge">Live</span></div>
+              <div class="item"><div><strong>Team review</strong><small>Collaboration room online</small></div><span class="badge good">Active</span></div>
+              <div class="item"><div><strong>Cloud assets</strong><small>128 synced clips</small></div><span class="badge">Synced</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="showcase">
+    <div class="container">
+      <div class="section-label">Community showcase</div>
+      <h2 class="section-title">A gallery that makes creator output feel collectible</h2>
+      <p class="section-copy">Community remixes, prompt sharing, and social-ready clips create a loop between creation, inspiration, and distribution.</p>
+
+      <div class="grid-3 reveal" style="margin-top:24px;">
+        <div class="panel"><div class="panel-inner"><h3>@sakura.frames</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Studio Ghibli inspired forest travel scene. 4.2k likes.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>@neon_director</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Cyberpunk music video with masked subject passes. 7.8k likes.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>@motion.forest</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Watercolor portrait motion with scene split edits. 2.9k likes.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section compact" id="architecture">
+    <div class="container">
+      <div class="section-label">Implementation</div>
+      <h2 class="section-title">Full-stack architecture, database schema, API structure, and folder layout</h2>
+      <p class="section-copy">These blocks translate the product into an implementation plan: Next.js frontend, Node orchestration, FastAPI AI workers, Redis queues, PostgreSQL storage, and GPU-backed rendering services.</p>
+
+      <div class="grid-2 reveal" style="margin-top:24px;">
+        <div class="panel"><div class="panel-inner"><h3>System architecture</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Frontend: Next.js, React, TypeScript, Tailwind, Framer Motion, Three.js, GSAP. Backend: Node.js API gateway, FastAPI AI services, WebSockets for render status, Redis queue, PostgreSQL, S3 or GCS object storage, CDN delivery, GPU workers.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>Monetization model</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Free for demos, Pro for creators, Studio for teams, Enterprise for custom deployment. Upsell credits, marketplace presets, API usage, and dedicated GPU lanes.</p></div></div>
+      </div>
+
+      <div class="code-grid">
+        <div>
+          <div class="code-title"><strong>Folder structure</strong><span>Reference implementation</span></div>
+          <pre class="code">morphix-platform/
+  app/
+    landing/
+    studio/
+    dashboard/
+    pricing/
+  components/
+    hero/
+    editor/
+    timeline/
+    upload/
+    showcase/
+  lib/
+    api/
+    auth/
+    billing/
+    queue/
+    storage/
+  server/
+    gateway/
+    workers/
+    webhooks/
+  ai/
+    workflows/
+    prompts/
+    models/
+    segments/
+  prisma/
+  scripts/
+  public/</pre>
+        </div>
+        <div>
+          <div class="code-title"><strong>Database schema</strong><span>PostgreSQL</span></div>
+          <pre class="code">users(id, email, name, plan, credits, created_at)
+projects(id, user_id, title, status, style_id, prompt, duration)
+renders(id, project_id, step, progress, gpu_seconds, output_url)
+assets(id, project_id, type, storage_key, metadata)
+style_presets(id, slug, name, model_chain, default_strength)
+scene_segments(id, project_id, start_ms, end_ms, style_id)
+team_members(id, team_id, user_id, role)
+subscriptions(id, user_id, provider, status, renewal_at)</pre>
+        </div>
+      </div>
+
+      <div class="code-grid">
+        <div>
+          <div class="code-title"><strong>API surface</strong><span>REST + WebSocket</span></div>
+          <pre class="code">POST   /v1/uploads
+POST   /v1/projects
+POST   /v1/projects/:id/render
+POST   /v1/projects/:id/preview
+GET    /v1/projects/:id
+GET    /v1/styles
+GET    /v1/renders/:id
+WS     /v1/renders/:id/status
+POST   /v1/webhooks/stripe
+POST   /v1/webhooks/render</pre>
+        </div>
+        <div>
+          <div class="code-title"><strong>Frontend sample</strong><span>React + TypeScript</span></div>
+          <pre class="code">function StudioPanel() {
+  const [strength, setStrength] = useState(82);
+  return (
+    &lt;section className="studio-shell"&gt;
+      &lt;Timeline onSplit={handleSplit} /&gt;
+      &lt;Preview mode="before-after" strength={strength} /&gt;
+      &lt;Slider value={strength} onChange={setStrength} /&gt;
+    &lt;/section&gt;
+  );
+}
+
+// Connect WebSocket render status to queue UI.
+// Persist autosave snapshots every 10 seconds.</pre>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:18px;">
+        <div class="panel"><div class="panel-inner"><h3>AI pipeline architecture</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Frame extraction, face detection, depth estimation, motion tracking, segmentation, reference guidance, stable diffusion video pass, interpolation, consistency correction, upscaling, and export packaging.</p></div></div>
+        <div class="panel"><div class="panel-inner"><h3>Infrastructure plan</h3><p class="section-copy" style="margin-top:8px; font-size:0.94rem;">Autoscaling GPU workers on AWS or GCP, object storage for source and output, Redis for job queues, CDN for previews, and WebSockets for live render state. Add audit logs and SSO for enterprise.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Monetization designed for creators, studios, and platform teams</h2>
+      <p class="section-copy">Pricing follows usage intensity and collaboration depth. The model should reward casual experimentation while scaling cleanly into high-volume production use.</p>
+
+      <div class="pricing-grid reveal">
+        <div class="plan">
+          <div class="label">Free</div>
+          <div class="price">$0</div>
+          <p class="section-copy" style="margin-top:6px; font-size:0.92rem;">Starter access for demos and community publishing.</p>
+          <ul class="features">
+            <li><span class="tick">✓</span>5 renders per month</li>
+            <li><span class="tick">✓</span>720p export</li>
+            <li><span class="tick">✓</span>Watermarked output</li>
+            <li><span class="tick">✓</span>Community showcase</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%;">Get started</button>
+        </div>
+        <div class="plan featured">
+          <div class="label">Pro</div>
+          <div class="price">$24 <small>/mo</small></div>
+          <p class="section-copy" style="margin-top:6px; font-size:0.92rem;">For creators shipping regularly to social channels and clients.</p>
+          <ul class="features">
+            <li><span class="tick">✓</span>Priority queue</li>
+            <li><span class="tick">✓</span>1080p and 4K export</li>
+            <li><span class="tick">✓</span>No watermark</li>
+            <li><span class="tick">✓</span>Style blending</li>
+          </ul>
+          <button class="btn btn-primary" style="width:100%;">Start Pro</button>
+        </div>
+        <div class="plan">
+          <div class="label">Studio</div>
+          <div class="price">$79 <small>/mo</small></div>
+          <p class="section-copy" style="margin-top:6px; font-size:0.92rem;">For agencies, teams, and collaborative production rooms.</p>
+          <ul class="features">
+            <li><span class="tick">✓</span>Team workspaces</li>
+            <li><span class="tick">✓</span>API access</li>
+            <li><span class="tick">✓</span>Alpha export</li>
+            <li><span class="tick">✓</span>Commercial license</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%;">Start Studio</button>
+        </div>
+        <div class="plan">
+          <div class="label">Enterprise</div>
+          <div class="price">Custom</div>
+          <p class="section-copy" style="margin-top:6px; font-size:0.92rem;">Dedicated GPU lanes, SSO, audit logs, and on-prem or private cloud deployment.</p>
+          <ul class="features">
+            <li><span class="tick">✓</span>Dedicated support</li>
+            <li><span class="tick">✓</span>Volume pricing</li>
+            <li><span class="tick">✓</span>White-label options</li>
+            <li><span class="tick">✓</span>Compliance controls</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%;">Contact sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section compact" id="faq">
+    <div class="container">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Practical answers for production use</h2>
+      <div class="faq-grid reveal">
+        <div class="faq"><h4>How does motion consistency work?</h4><p>Motion vectors, optical flow, and temporal coherence models keep object movement, camera paths, and lip sync stable across stylized frames.</p></div>
+        <div class="faq"><h4>Can I mix styles?</h4><p>Yes. Each scene can carry a unique style and intensity, and the editor supports crossfade blending between styles for hybrid mixed-media results.</p></div>
+        <div class="faq"><h4>What exports are supported?</h4><p>MP4, MOV, GIF, alpha channel video, and social presets such as 9:16, 1:1, and 16:9 at 720p, 1080p, or 4K.</p></div>
+        <div class="faq"><h4>Can teams collaborate?</h4><p>Studio and Enterprise include shared workspaces, render status visibility, asset libraries, comments, and multi-user review flows.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand" href="#hero"><span class="brand-mark"></span> Morphix</a>
+      <p>Cinematic AI mixed-media video tooling for creators, filmmakers, musicians, and teams building the next generation of stylized motion.</p>
+    </div>
+    <div>
+      <strong style="color:var(--white);">Product</strong>
+      <a href="#features">Features</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#editor">Editor</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div>
+      <strong style="color:var(--white);">Resources</strong>
+      <a href="#architecture">Docs</a>
+      <a href="#architecture">API</a>
+      <a href="#showcase">Community</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div>
+      <strong style="color:var(--white);">Company</strong>
+      <a href="#">Discord</a>
+      <a href="#">Careers</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+  const mixSlider = document.getElementById('mixSlider');
+  const mixValue = document.getElementById('mixValue');
+  const beforeAfterFrame = document.getElementById('beforeAfterFrame');
+  mixSlider.addEventListener('input', () => {
+    const value = Number(mixSlider.value);
+    mixValue.textContent = value + '%';
+    beforeAfterFrame.children[0].style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+    beforeAfterFrame.children[1].style.clipPath = `inset(0 0 0 ${value}%)`;
+  });
+  mixSlider.dispatchEvent(new Event('input'));
+
+  const styleTiles = document.querySelectorAll('.style-tile');
+  const selectedStyle = document.getElementById('selectedStyle');
+  styleTiles.forEach((tile) => {
+    tile.addEventListener('click', () => {
+      styleTiles.forEach((t) => t.classList.remove('active'));
+      tile.classList.add('active');
+      selectedStyle.textContent = tile.dataset.style;
+    });
+  });
+
+  const workflowSteps = document.querySelectorAll('.workflow-step');
+  workflowSteps.forEach((step) => {
+    step.addEventListener('click', () => {
+      workflowSteps.forEach((item) => item.classList.remove('active'));
+      step.classList.add('active');
+    });
+  });
+
+  const rangeBindings = [
+    ['strengthSlider', 'strengthValue'],
+    ['smoothSlider', 'smoothValue'],
+    ['faceSlider', 'faceValue']
+  ];
+  rangeBindings.forEach(([inputId, outputId]) => {
+    const input = document.getElementById(inputId);
+    const output = document.getElementById(outputId);
+    input.addEventListener('input', () => output.textContent = input.value + '%');
+  });
+
+  const chips = document.querySelectorAll('.chip, .pill');
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const parent = chip.parentElement;
+      parent.querySelectorAll('.chip.active, .pill.active').forEach((active) => active.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

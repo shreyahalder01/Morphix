@@ -1,0 +1,126 @@
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[mock] FFmpeg stylization failed, falling back to copied frames: [Error: Command failed: S:\projects\mm\mixed media\node_modules\ffmpeg-static\ffmpeg.exe -y -framerate 5 -i S:\projects\mm\mixed media\data\renders\job_1779222266330_7klwxr\frames\frame_%04d.png -vf format=gray,eq=contrast=1.71:brightness=0.09,colorize=hue=120:saturation=1.01,noise=alls=26:allf=t+u -frames:v 135 S:\projects\mm\mixed media\data\renders\job_1779222266330_7klwxr\styled\frame_%04d.png
+ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers
+  built with gcc 12.2.0 (Rev10, Built by MSYS2 project)
+  configuration: --enable-gpl --enable-version3 --enable-static --pkg-config=pkgconf --disable-w32threads --disable-autodetect --enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx --enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-ffnvcodec --enable-nvdec --enable-nvenc --enable-dxva2 --enable-d3d11va --enable-libvpl --enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora --enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-librubberband
+  libavutil      58. 29.100 / 58. 29.100
+  libavcodec     60. 31.102 / 60. 31.102
+  libavformat    60. 16.100 / 60. 16.100
+  libavdevice    60.  3.100 / 60.  3.100
+  libavfilter     9. 12.100 /  9. 12.100
+  libswscale      7.  5.100 /  7.  5.100
+  libswresample   4. 12.100 /  4. 12.100
+  libpostproc    57.  3.100 / 57.  3.100
+Input #0, image2, from 'S:\projects\mm\mixed media\data\renders\job_1779222266330_7klwxr\frames\frame_%04d.png':
+  Duration: 00:00:27.00, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/bt709/bt709), 768x576 [SAR 1:1 DAR 4:3], 5 fps, 5 tbr, 5 tbn
+[Parsed_colorize_2 @ 0000025f6c25c480] Value 1.010000 for parameter 'saturation' out of range [0 - 1]
+Error applying option 'saturation' to filter 'colorize': Result too large
+[vost#0:0/png @ 0000025f6be44dc0] Error initializing a simple filtergraph
+Error opening output file S:\projects\mm\mixed media\data\renders\job_1779222266330_7klwxr\styled\frame_%04d.png.
+Error opening output files: Result too large
+] {
+  code: 4294967262,
+  killed: false,
+  signal: null,
+  cmd: 'S:\\projects\\mm\\mixed media\\node_modules\\ffmpeg-static\\ffmpeg.exe -y -framerate 5 -i S:\\projects\\mm\\mixed media\\data\\renders\\job_1779222266330_7klwxr\\frames\\frame_%04d.png -vf format=gray,eq=contrast=1.71:brightness=0.09,colorize=hue=120:saturation=1.01,noise=alls=26:allf=t+u -frames:v 135 S:\\projects\\mm\\mixed media\\data\\renders\\job_1779222266330_7klwxr\\styled\\frame_%04d.png',
+  stdout: '',
+  stderr: 'ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r\n' +
+    '  built with gcc 12.2.0 (Rev10, Built by MSYS2 project)\r\n' +
+    '  configuration: --enable-gpl --enable-version3 --enable-static --pkg-config=pkgconf --disable-w32threads --disable-autodetect --enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-sdl2 --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx --enable-mediafoundation --enable-libass --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-ffnvcodec --enable-nvdec --enable-nvenc --enable-dxva2 --enable-d3d11va --enable-libvpl --enable-libgme --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libtheora --enable-libvo-amrwbenc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-librubberband\r\n' +
+    '  libavutil      58. 29.100 / 58. 29.100\r\n' +
+    '  libavcodec     60. 31.102 / 60. 31.102\r\n' +
+    '  libavformat    60. 16.100 / 60. 16.100\r\n' +
+    '  libavdevice    60.  3.100 / 60.  3.100\r\n' +
+    '  libavfilter     9. 12.100 /  9. 12.100\r\n' +
+    '  libswscale      7.  5.100 /  7.  5.100\r\n' +
+    '  libswresample   4. 12.100 /  4. 12.100\r\n' +
+    '  libpostproc    57.  3.100 / 57.  3.100\r\n' +
+    "Input #0, image2, from 'S:\\projects\\mm\\mixed media\\data\\renders\\job_1779222266330_7klwxr\\frames\\frame_%04d.png':\r\n" +
+    '  Duration: 00:00:27.00, start: 0.000000, bitrate: N/A\r\n' +
+    '  Stream #0:0: Video: png, rgb24(pc, gbr/bt709/bt709), 768x576 [SAR 1:1 DAR 4:3], 5 fps, 5 tbr, 5 tbn\r\n' +
+    "[Parsed_colorize_2 @ 0000025f6c25c480] Value 1.010000 for parameter 'saturation' out of range [0 - 1]\r\n" +
+    "Error applying option 'saturation' to filter 'colorize': Result too large\r\n" +
+    '[vost#0:0/png @ 0000025f6be44dc0] Error initializing a simple filtergraph\r\n' +
+    'Error opening output file S:\\projects\\mm\\mixed media\\data\\renders\\job_1779222266330_7klwxr\\styled\\frame_%04d.png.\r\n' +
+    'Error opening output files: Result too large\r\n'
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}
+[comfyui] Frame frame_0001.png failed; using local fallback: [TypeError: fetch failed] {
+  [cause]: Error: connect ECONNREFUSED 127.0.0.1:8188
+      at <unknown> (Error: connect ECONNREFUSED 127.0.0.1:8188) {
+    errno: -4078,
+    code: 'ECONNREFUSED',
+    syscall: 'connect',
+    address: '127.0.0.1',
+    port: 8188
+  }
+}

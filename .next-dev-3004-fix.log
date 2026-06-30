@@ -1,0 +1,20 @@
+
+> morphix-mixed-media-studio@1.0.0 dev
+> next dev -p 3004
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3004
+   - Network:      http://192.168.29.26:3004
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+
+ ✓ Starting...
+ ✓ Ready in 2.8s
+ ○ Compiling / ...
+ ✓ Compiled / in 6.5s (604 modules)
+ GET / 200 in 7479ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 2.1s (951 modules)
+ GET / 500 in 5338ms
+ ✓ Compiled in 308ms (507 modules)

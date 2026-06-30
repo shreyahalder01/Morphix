@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #050608;
+  --bg-2: #0b0d12;
+  --bg-3: #10131a;
+  --panel: rgba(16, 19, 26, 0.82);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --text: #d7dbe5;
+  --muted: #96a0b5;
+  --white: #f7f8fb;
+  --purple: #8b68ff;
+  --purple-2: #b59aff;
+  --blue: #42a6ff;
+  --magenta: #ef5aa8;
+  --green: #57e6a4;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(139, 104, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 80% 0%, rgba(66, 166, 255, 0.1), transparent 25%),
+    radial-gradient(circle at 80% 70%, rgba(239, 90, 168, 0.1), transparent 22%),
+    linear-gradient(180deg, #06070b 0%, #070a0f 35%, #050608 100%);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.glass-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    var(--panel);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.035) inset;
+  backdrop-filter: blur(22px);
+}
+
+.gradient-border {
+  isolation: isolate;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(139, 104, 255, 0.46), rgba(66, 166, 255, 0.22), rgba(239, 90, 168, 0.32));
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.scrollbar-thin {
+  scrollbar-color: rgba(139, 104, 255, 0.35) rgba(255, 255, 255, 0.04);
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(139, 104, 255, 0.36);
+  border-radius: 999px;
+}
+
+/* Drag-and-drop active state */
+.drag-active {
+  border-color: rgba(139, 104, 255, 0.7) !important;
+  background: rgba(139, 104, 255, 0.12) !important;
+}
+
+/* Progress bar animation */
+@keyframes progress-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, var(--purple), var(--blue), var(--purple));
+  background-size: 200% 100%;
+  animation: progress-shimmer 2s linear infinite;
+}
+
+/* Ambient glow orbs */
+.ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.ambient::before,
+.ambient::after {
+  content: '';
+  position: absolute;
+  width: 42vw;
+  height: 42vw;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.22;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+.ambient::before {
+  background: rgba(139, 104, 255, 0.65);
+  top: -8vw;
+  left: -10vw;
+}
+
+.ambient::after {
+  background: rgba(66, 166, 255, 0.58);
+  bottom: -12vw;
+  right: -10vw;
+  animation-delay: -4s;
+}
+
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(32px, -18px, 0) scale(1.08); }
+}
+
+/* Style tiles */
+.tile-anime    { background: linear-gradient(135deg, #150825, #42115f 44%, #f05fd8); }
+.tile-clay     { background: linear-gradient(135deg, #231204, #7a3f16 52%, #f0b066); }
+.tile-sketch   { background: linear-gradient(135deg, #0f1014, #4d5466 52%, #e2e6ec); }
+.tile-collage  { background: linear-gradient(135deg, #2b0d24, #6d2267 52%, #f27ac0); }
+.tile-water    { background: linear-gradient(135deg, #0d1627, #21578d 52%, #86d3ff); }
+.tile-cyber    { background: linear-gradient(135deg, #05110d, #0d5b3e 52%, #5bffbf); }
+.tile-noir     { background: linear-gradient(135deg, #000 0%, #151515 44%, #7b7b7b); }
+.tile-vhs      { background: linear-gradient(135deg, #241400, #6f4a16 52%, #ffc84f); }
+.tile-ghibli   { background: linear-gradient(135deg, #0d1e2a, #1a4e69 52%, #74d7cb); }

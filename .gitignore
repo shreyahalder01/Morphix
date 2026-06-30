@@ -1,0 +1,12 @@
+.next/
+node_modules/
+.venv/
+data/uploads/*
+data/jobs/*
+data/renders/*
+!data/**/.gitkeep
+.env.local
+*.mp4
+*.mov
+*.avi
+*.webm

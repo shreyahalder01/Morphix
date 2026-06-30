@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: morphix
+      POSTGRES_USER: morphix
+      POSTGRES_PASSWORD: morphix
+    ports:
+      - '5433:5432'
+    volumes:
+      - morphix-postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - morphix-redis:/data
+
+volumes:
+  morphix-postgres:
+  morphix-redis:
